@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
 	cv::namedWindow(colour_view, 1);
 	// Create a window
 	cv::namedWindow(binary_view, 1);
-	const int hue_slider_max = 179;
+	const int hue_slider_max = 179 - 10;
 	const int SV_slider_max = 254;
 	int hue_center = 30;
 	int min_S = 0;
