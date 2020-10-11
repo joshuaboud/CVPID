@@ -3,11 +3,12 @@
 #include <opencv2/highgui.hpp>
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <sstream>
 
 const char *colour_view = "CVPID Vision";
 const char *binary_view = "Threshold Mask";
 
-cv::Point find_x_y(const cv::Mat &input, int hue_center, int min_S, int min_V, cv::Mat &binary, double &area){
+bool find_x_y(const cv::Mat &input, cv::Point &p, int hue_center, int min_S, int min_V, int min_A, cv::Mat &binary, double &area){
 	cv::Mat frame_HSV;
 	cv::cvtColor(input, frame_HSV, cv::COLOR_BGR2HSV);
 	cv::Scalar low_HSV((hue_center - 10)%180, min_S, min_V);
@@ -17,8 +18,11 @@ cv::Point find_x_y(const cv::Mat &input, int hue_center, int min_S, int min_V, c
 	//cv::threshold(grey, binary, threshold, 255, type);
 	cv::Moments mu = cv::moments(binary, true);
 	area = mu.m00;
-	cv::Point p(mu.m10 / mu.m00, mu.m01 / mu.m00);
-	return p;
+	if(area < min_A)
+		return false;
+	p.x = mu.m10 / mu.m00;
+	p.y = mu.m01 / mu.m00;
+	return true;
 }
 
 void draw_box(cv::Mat &img, cv::Point loc, double circle_area){
@@ -28,13 +32,18 @@ void draw_box(cv::Mat &img, cv::Point loc, double circle_area){
 	cv::Scalar colour(0,255,0);
 	int thickness = 2;
 	cv::rectangle(img, top_left, bot_right, colour, thickness, cv::LINE_4, 0);
+	std::stringstream coords;
+	coords << "(" << loc.x << "," << loc.y << ")";
+	cv::putText(img, coords.str(), cv::Point(loc.x - radius, loc.y + radius + 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
 }
 
 int main(int argc, char *argv[]){
 	double circle_area;
 	char keypress;
+	bool ball_found = false;
 	cv::VideoCapture camera;
 	cv::Mat image, binary;
+	cv::Point centroid(0, 0);
 	
 	// Create a window
 	cv::namedWindow(colour_view, 1);
@@ -42,12 +51,15 @@ int main(int argc, char *argv[]){
 	cv::namedWindow(binary_view, 1);
 	const int hue_slider_max = 179 - 10;
 	const int SV_slider_max = 254;
-	int hue_center = 30;
-	int min_S = 0;
-	int min_V = 0;
+	const int min_A_slider_max = 1000;
+	int hue_center = 108;
+	int min_S = 209;
+	int min_V = 64;
+	int min_A = 107;
 	cv::createTrackbar("Hue", binary_view, &hue_center, hue_slider_max, NULL);
 	cv::createTrackbar("Min Saturation", binary_view, &min_S, SV_slider_max, NULL);
 	cv::createTrackbar("Min Value", binary_view, &min_V, SV_slider_max, NULL);
+	cv::createTrackbar("Min Area", binary_view, &min_A, min_A_slider_max, NULL);
 	
 	// open camera 0
 	if(!camera.open(0)){
@@ -59,9 +71,11 @@ int main(int argc, char *argv[]){
 	while(true){
 		camera >> image;
 		
-		cv::Point centroid = find_x_y(image, hue_center, min_S, min_V, binary, circle_area);
+		ball_found = find_x_y(image, centroid, hue_center, min_S, min_V, min_A, binary, circle_area);
 		
-		draw_box(image, centroid, circle_area);
+		if(ball_found){
+			draw_box(image, centroid, circle_area);
+		}
 		
 		cv::imshow(colour_view, image);
 		cv::imshow(binary_view, binary);
