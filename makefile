@@ -1,7 +1,7 @@
 TARGET = cvpid
-LIBS = -lraspicam -lraspicam_cv -lmmal -lmmal_core -lmmal_util -lopencv_core -lopencv_highgui
+LIBS = -L$(HOME)/.local/lib -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_videoio
 CC = g++
-CFLAGS = -std=gnu++11 -Wall -Wextra
+CFLAGS = -std=gnu++11 -Wall -Wextra -I$(HOME)/.local/include/opencv4 
 
 OBJECTS = $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 HEADERS = $(wildcard src/*.hpp)
