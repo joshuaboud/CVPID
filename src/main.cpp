@@ -1,89 +1,51 @@
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <sstream>
-
-const char *colour_view = "CVPID Vision";
-const char *binary_view = "Threshold Mask";
-
-bool find_x_y(const cv::Mat &input, cv::Point &p, int hue_center, int min_S, int min_V, int min_A, cv::Mat &binary, double &area){
-	cv::Mat frame_HSV;
-	cv::cvtColor(input, frame_HSV, cv::COLOR_BGR2HSV);
-	cv::Scalar low_HSV((hue_center - 10)%180, min_S, min_V);
-	cv::Scalar high_HSV((hue_center + 10)%180, 255, 255);
-	cv::inRange(frame_HSV, low_HSV, high_HSV, binary);
-	//cv::ThresholdTypes type = (invert)? cv::THRESH_BINARY_INV : cv::THRESH_BINARY;
-	//cv::threshold(grey, binary, threshold, 255, type);
-	cv::Moments mu = cv::moments(binary, true);
-	area = mu.m00;
-	if(area < min_A)
-		return false;
-	p.x = mu.m10 / mu.m00;
-	p.y = mu.m01 / mu.m00;
-	return true;
-}
-
-void draw_box(cv::Mat &img, cv::Point loc, double circle_area){
-	double radius = sqrt(circle_area / M_PI);
-	cv::Point top_left(loc.x - radius, loc.y - radius);
-	cv::Point bot_right(loc.x + radius, loc.y + radius);
-	cv::Scalar colour(0,255,0);
-	int thickness = 2;
-	cv::rectangle(img, top_left, bot_right, colour, thickness, cv::LINE_4, 0);
-	std::stringstream coords;
-	coords << "(" << loc.x << "," << loc.y << ")";
-	cv::putText(img, coords.str(), cv::Point(loc.x - radius, loc.y + radius + 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
-}
+#include "captureWorker.hpp"
+#include "processingWorker.hpp"
+#include "pwmWorker.hpp"
+#include "displayWorker.hpp"
+#include "mailBox.hpp"
+#include <thread>
 
 int main(int argc, char *argv[]){
-	double circle_area;
-	char keypress;
-	bool ball_found = false;
-	cv::VideoCapture camera;
-	cv::Mat image, binary;
-	cv::Point centroid(0, 0);
+	// set up mailboxes
+	MailBox<cv::Mat> capture2process;
+	MailBox<PwmInfo> process2pwm;
+	MailBox<BlobInfo> process2display;
 	
-	// Create a window
-	cv::namedWindow(colour_view, 1);
-	// Create a window
-	cv::namedWindow(binary_view, 1);
-	const int hue_slider_max = 179 - 10;
-	const int SV_slider_max = 254;
-	const int min_A_slider_max = 1000;
-	int hue_center = 108;
-	int min_S = 209;
-	int min_V = 64;
-	int min_A = 107;
-	cv::createTrackbar("Hue", binary_view, &hue_center, hue_slider_max, NULL);
-	cv::createTrackbar("Min Saturation", binary_view, &min_S, SV_slider_max, NULL);
-	cv::createTrackbar("Min Value", binary_view, &min_V, SV_slider_max, NULL);
-	cv::createTrackbar("Min Area", binary_view, &min_A, min_A_slider_max, NULL);
+	// set up shared memory
+	ProcParams params;
+	bool running = true;
 	
-	// open camera 0
-	if(!camera.open(0)){
-		printf("Error opening camera 0");
-		return -1;
-	}
-	camera.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-	camera.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
-	while(true){
-		camera >> image;
-		
-		ball_found = find_x_y(image, centroid, hue_center, min_S, min_V, min_A, binary, circle_area);
-		
-		if(ball_found){
-			draw_box(image, centroid, circle_area);
-		}
-		
-		cv::imshow(colour_view, image);
-		cv::imshow(binary_view, binary);
+	// launch threads
+	std::thread capture_worker(
+		capture,
+		std::ref(capture2process),
+		std::ref(running)
+	);
+	std::thread process_worker(
+		process,
+		std::ref(capture2process),
+		std::ref(params),
+		std::ref(process2pwm),
+		std::ref(process2display),
+		std::ref(running)
+	);
+	std::thread pwm_worker(
+		pwm,
+		std::ref(process2pwm),
+		std::ref(running)
+	);
+	std::thread display_worker(
+		display,
+		std::ref(process2display),
+		std::ref(params),
+		std::ref(running)
+	);
 	
-		keypress = (char)cv::waitKey(1);
-		if(keypress == (char)27)
-			break;
-	}
+	// synchronize threads
+	capture_worker.join();
+	process_worker.join();
+	pwm_worker.join();
+	display_worker.join();
 	
 	return 0;
 }
