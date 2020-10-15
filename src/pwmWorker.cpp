@@ -2,6 +2,7 @@
 
 void pwm(MailBox<PwmInfo> pwm_in){
 	while(true){
-		pwm_in.get();
+		PwmInfo in = pwm_in.get();
+		// send pwm to controller board
 	}
 }
