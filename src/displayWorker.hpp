@@ -8,6 +8,7 @@ struct BlobInfo{
 	cv::Mat binary;
 	cv::Point p;
 	double circle_area;
+	double dt;
 };
 
 class ProcParams; // fwd dec

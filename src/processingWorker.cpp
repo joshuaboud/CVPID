@@ -22,6 +22,9 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct Pwm
 		cv::inRange(HSV, low_HSV, high_HSV, binary);
 		cv::Moments mu = cv::moments(binary, true);
 		cv::Point p(mu.m10 / mu.m00, mu.m01 / mu.m00);
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		double dt = elapsed.count();
 		if(mu.m00 < params.min_A){
 			display.found = false;
 			pwm.x = pwm.y = 0;
@@ -31,12 +34,11 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct Pwm
 			display.circle_area = mu.m00;
 			
 			// calculate PID
-			auto finish = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double> elapsed = finish - start;
-			double dt = elapsed.count();
 			pwm.x = x_control.calc(params.set_point_x, p.x, dt);
 			pwm.x = y_control.calc(params.set_point_y, p.y, dt);
 		}
+		// sample rate
+		display.dt = dt;
 		display.colour = input;
 		display.binary = binary;
 		display_out.try_put(display); // low priority, skip if can't

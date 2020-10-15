@@ -47,7 +47,7 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 		if(display.found){
 			draw_box(display.colour, display.p, display.circle_area);
 		}
-		
+		cv::putText(display.colour, "fps: " + std::to_string(1.0 / display.dt), cv::Point(20, 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
 		cv::imshow(colour_view, display.colour);
 		cv::imshow(binary_view, display.binary);
 	
