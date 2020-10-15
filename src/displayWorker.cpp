@@ -32,6 +32,19 @@ static void draw_target(cv::Mat &img, int x, int y){
 	cv::line(img, cv::Point(x - length, y), cv::Point(x + length, y), colour, thickness, lineType);
 }
 
+static void mouse_callback(int event, int x, int y, int flags, void* params_){
+	(void) flags;
+	static bool follow_mouse = false;
+	ProcParams *params = static_cast<ProcParams *>(params_);
+	if(event == cv::EVENT_LBUTTONDOWN){
+		follow_mouse = !follow_mouse;
+	}
+	else if(event == cv::EVENT_MOUSEMOVE && follow_mouse){
+		params->set_point_x = x;
+		params->set_point_y = y;
+	}
+}
+
 void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 	// Create a window
 	cv::namedWindow(colour_view, 1);
@@ -40,20 +53,18 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 	const int hue_slider_max = 179 - 10;
 	const int SV_slider_max = 254;
 	const int min_A_slider_max = 1000;
-	const int set_point_x_max = 640;
-	const int set_point_y_max = 360;
 	params.hue_center = 108;
 	params.min_S = 209;
 	params.min_V = 64;
 	params.min_A = 107;
-	params.set_point_x = set_point_x_max / 2;
-	params.set_point_y = set_point_y_max / 2;
 	cv::createTrackbar("Hue", binary_view, &params.hue_center, hue_slider_max, NULL);
 	cv::createTrackbar("Min Saturation", binary_view, &params.min_S, SV_slider_max, NULL);
 	cv::createTrackbar("Min Value", binary_view, &params.min_V, SV_slider_max, NULL);
 	cv::createTrackbar("Min Area", binary_view, &params.min_A, min_A_slider_max, NULL);
-	cv::createTrackbar("X", colour_view, &params.set_point_x, set_point_x_max, NULL);
-	cv::createTrackbar("Y", colour_view, &params.set_point_y, set_point_y_max, NULL);
+	
+	params.set_point_x = 640 / 2;
+	params.set_point_y = 360 / 2;
+	cv::setMouseCallback(colour_view, mouse_callback, &params);
 	
 	while(running){
 		BlobInfo display = display_in.get();
