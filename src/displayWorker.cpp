@@ -50,6 +50,13 @@ static void draw_target(cv::Mat &img, int x, int y){
 	cv::line(img, cv::Point(x - length, y), cv::Point(x + length, y), colour, thickness, lineType);
 }
 
+static void draw_error(cv::Mat &img, const cv::Point &set, const cv::Point &curr){
+	const int thickness = 4;
+	const int lineType = cv::LINE_8;
+	cv::Scalar colour(0, 255, 0);
+	cv::arrowedLine(img, curr, set, colour, thickness, lineType, 0, 0.2);
+}
+
 static void mouse_callback(int event, int x, int y, int flags, void* params_){
 	(void) flags;
 	static bool follow_mouse = false;
@@ -86,10 +93,11 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 	
 	while(running){
 		BlobInfo display = display_in.get();
+		draw_target(display.colour, params.set_point_x, params.set_point_y);
 		if(display.found){
+			draw_error(display.colour, cv::Point(params.set_point_x, params.set_point_y), display.p);
 			draw_box(display.colour, display.p, display.circle_area);
 		}
-		draw_target(display.colour, params.set_point_x, params.set_point_y);
 		cv::putText(display.colour, "fps: " + std::to_string(1.0 / display.dt), cv::Point(20, 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
 		cv::imshow(colour_view, display.colour);
 		cv::imshow(binary_view, display.binary);
