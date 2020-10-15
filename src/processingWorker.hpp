@@ -3,9 +3,9 @@
 #include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
 
-#define KP 10.0
-#define KI 10.0
-#define KD 10.0
+#define KP 0.1
+#define KI 0.01
+#define KD 0.01
 #define MAX_TILT 45.0
 #define MIN_TILT -45.0
 

@@ -35,7 +35,7 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct Pwm
 			
 			// calculate PID
 			pwm.x = x_control.calc(params.set_point_x, p.x, dt);
-			pwm.x = y_control.calc(params.set_point_y, p.y, dt);
+			pwm.y = y_control.calc(params.set_point_y, p.y, dt);
 		}
 		// sample rate
 		display.dt = dt;
