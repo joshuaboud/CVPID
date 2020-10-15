@@ -51,7 +51,7 @@ void display(MailBox<BlobInfo> display_in, ProcParams &params, bool &running){
 		cv::imshow(colour_view, display.colour);
 		cv::imshow(binary_view, display.binary);
 	
-		keypress = (char)cv::waitKey(1);
+		char keypress = (char)cv::waitKey(1);
 		if(keypress == (char)27)
 			running = false;
 	}
