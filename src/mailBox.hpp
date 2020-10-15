@@ -21,6 +21,12 @@ public:
 		package = T(in);
 		sem.release();
 	}
+	void try_put(T &in){
+		if(full.try_lock()){
+			package = T(in);
+			sem.release();
+		}
+	}
 	T get(void){
 		sem.acquire();
 		T out = T(package);
