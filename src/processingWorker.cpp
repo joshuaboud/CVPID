@@ -1,4 +1,6 @@
 #include "processingWorker.hpp"
+#include "pwmWorker.hpp"
+#include "displayWorker.hpp"
 #include "PID.hpp"
 #include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
