@@ -36,7 +36,7 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct Pwm
 			pwm.x = x_control.calc(params.set_point.x, p.x, dt);
 			pwm.x = y_control.calc(params.set_point.y, p.y, dt);
 		}
-		display_out.put(display);
-		pwm_out.put(pwm);
+		display_out.try_put(display); // low priority, skip if can't
+		pwm_out.put(pwm); // high priority
 	}
 }
