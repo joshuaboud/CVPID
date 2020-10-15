@@ -11,4 +11,4 @@ struct BlobInfo{
 	double circle_area;
 };
 
-void display(MailBox<BlobInfo> display_in, ProcParams &params);
+void display(MailBox<BlobInfo> display_in, ProcParams &params, bool &running);

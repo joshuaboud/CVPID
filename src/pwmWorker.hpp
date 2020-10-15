@@ -7,4 +7,4 @@ struct PwmInfo{
 	double y;
 }
 
-void pwm(MailBox<PwmInfo> pwm_in);
+void pwm(MailBox<PwmInfo> pwm_in, bool &running);

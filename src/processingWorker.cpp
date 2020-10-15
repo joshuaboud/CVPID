@@ -7,11 +7,11 @@
 #include <opencv2/imgproc.hpp>
 #include <chrono>
 
-void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out){
+void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, bool &running){
 	cv::Mat input, HSV, binary;
 	PID x_control(KP, KI, KD, MAX_TILT, MIN_TILT);
 	PID y_control(KP, KI, KD, MAX_TILT, MIN_TILT);
-	while(true){
+	while(running){
 		auto start = std::chrono::high_resolution_clock::now();
 		BlobInfo display;
 		PwmInfo pwm;

@@ -2,8 +2,8 @@
 #include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
 
-void capture(cv::VideoCapture &camera, MailBox<cv::Mat> &mb){
-	while(true){
+void capture(cv::VideoCapture &camera, MailBox<cv::Mat> &mb, bool &running){
+	while(running){
 		camera >> mb;
 	}
 }

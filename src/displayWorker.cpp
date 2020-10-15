@@ -23,7 +23,7 @@ static void draw_box(cv::Mat &img, cv::Point loc, double circle_area){
 	cv::putText(img, coords.str(), cv::Point(loc.x - radius, loc.y + radius + 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
 }
 
-void display(MailBox<BlobInfo> display_in, ProcParams &params){
+void display(MailBox<BlobInfo> display_in, ProcParams &params, bool &running){
 	// Create a window
 	cv::namedWindow(colour_view, 1);
 	// Create a window
@@ -42,7 +42,7 @@ void display(MailBox<BlobInfo> display_in, ProcParams &params){
 	cv::createTrackbar("Min Value", binary_view, &params.min_V, SV_slider_max, NULL);
 	cv::createTrackbar("Min Area", binary_view, &params.min_A, min_A_slider_max, NULL);
 	
-	while(true){
+	while(running){
 		BlobInfo display = display_in.get();
 		if(display.found){
 			draw_box(display.colour, display.p, display.circle_area);
@@ -53,6 +53,6 @@ void display(MailBox<BlobInfo> display_in, ProcParams &params){
 	
 		keypress = (char)cv::waitKey(1);
 		if(keypress == (char)27)
-			break;
+			running = false;
 	}
 }
