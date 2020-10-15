@@ -62,4 +62,8 @@ public:
 		
 		return out;
 	}
+	void reset(void){
+		_previous_error = 0;
+		_integral = 0;
+	}
 };

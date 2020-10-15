@@ -46,6 +46,8 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct Pwm
 		if(mu.m00 < params.min_A){
 			display.found = false;
 			pwm.x = pwm.y = 0;
+			x_control.reset();
+			y_control.reset();
 		}else{
 			display.found = true;
 			display.p = p;
