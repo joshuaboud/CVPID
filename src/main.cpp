@@ -1,18 +1,19 @@
 #include "captureWorker.hpp"
 #include "processingWorker.hpp"
-#include "pwmWorker.hpp"
 #include "displayWorker.hpp"
+#include "pwmWorker.hpp"
 #include "mailBox.hpp"
 #include <thread>
 
-int main(int argc, char *argv[]){
+int main(){
 	// set up mailboxes
 	MailBox<cv::Mat> capture2process;
 	MailBox<PwmInfo> process2pwm;
 	MailBox<BlobInfo> process2display;
 	
 	// set up shared memory
-	ProcParams params;
+	ProcParams params = {};
+	
 	bool running = true;
 	
 	// launch threads

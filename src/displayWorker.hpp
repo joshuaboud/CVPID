@@ -1,7 +1,6 @@
 #pragma once
 
 #include "mailBox.hpp"
-#include "processingWorker.hpp"
 
 struct BlobInfo{
 	bool found = false;
@@ -11,4 +10,5 @@ struct BlobInfo{
 	double circle_area;
 };
 
-void display(MailBox<BlobInfo> display_in, ProcParams &params, bool &running);
+class ProcParams; // fwd dec
+void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running);

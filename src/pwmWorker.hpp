@@ -5,6 +5,6 @@
 struct PwmInfo{
 	double x;
 	double y;
-}
+};
 
-void pwm(MailBox<PwmInfo> pwm_in, bool &running);
+void pwm(MailBox<PwmInfo> &pwm_in, bool &running);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "displayWorker.hpp"
+#include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
 
 #define KP 10.0
@@ -14,8 +14,10 @@ struct ProcParams{
 	int min_S;
 	int min_V;
 	int min_A;
-	cv::Point set_point;
+	int set_point_x;
+	int set_point_y;
 };
 
-
+class PwmInfo;
+class BlobInfo;
 void process(MailBox<cv::Mat> &in, struct ProcParams &params, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, bool &running);

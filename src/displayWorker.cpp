@@ -23,7 +23,7 @@ static void draw_box(cv::Mat &img, cv::Point loc, double circle_area){
 	cv::putText(img, coords.str(), cv::Point(loc.x - radius, loc.y + radius + 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
 }
 
-void display(MailBox<BlobInfo> display_in, ProcParams &params, bool &running){
+void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 	// Create a window
 	cv::namedWindow(colour_view, 1);
 	// Create a window
@@ -35,8 +35,8 @@ void display(MailBox<BlobInfo> display_in, ProcParams &params, bool &running){
 	params.min_S = 209;
 	params.min_V = 64;
 	params.min_A = 107;
-	params.set_point.x = 0;
-	params.set_point.y = 0;
+	params.set_point_x = 0;
+	params.set_point_y = 0;
 	cv::createTrackbar("Hue", binary_view, &params.hue_center, hue_slider_max, NULL);
 	cv::createTrackbar("Min Saturation", binary_view, &params.min_S, SV_slider_max, NULL);
 	cv::createTrackbar("Min Value", binary_view, &params.min_V, SV_slider_max, NULL);
