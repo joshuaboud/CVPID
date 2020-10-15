@@ -1,5 +1,6 @@
 #include "processingWorker.hpp"
 #include "PID.hpp"
+#include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <chrono>
