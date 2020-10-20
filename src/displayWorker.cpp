@@ -19,6 +19,7 @@
 #include "displayWorker.hpp"
 #include "mailBox.hpp"
 #include "processingWorker.hpp"
+#include "PID.hpp"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
@@ -70,7 +71,16 @@ static void mouse_callback(int event, int x, int y, int flags, void* params_){
 	}
 }
 
-void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
+static void PID_callback(int position, void *params_){
+	PIDCallbackParams *param = static_cast<PIDCallbackParams *>(params_);
+	*param->x = (double)(position) * MAX_PID_VALUE / MAX_PID_SLIDER;
+	*param->y = (double)(position) * MAX_PID_VALUE / MAX_PID_SLIDER;
+	param->pidx->reset();
+	param->pidy->reset();
+}
+	
+
+void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, PID &y_control, bool &running){
 	// Create a window
 	cv::namedWindow(colour_view, 1);
 	// Create a window
@@ -79,7 +89,7 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 	const int SV_slider_max = 254;
 	const int min_A_slider_max = 1000;
 	params.hue_center = 108;
-	params.min_S = 209;
+	params.min_S = 100;
 	params.min_V = 64;
 	params.min_A = 107;
 	cv::createTrackbar("Hue", binary_view, &params.hue_center, hue_slider_max, NULL);
@@ -90,6 +100,34 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running){
 	params.set_point_x = 640 / 2;
 	params.set_point_y = 360 / 2;
 	cv::setMouseCallback(colour_view, mouse_callback, &params);
+	
+	const int kp_slider_max = MAX_PID_SLIDER;
+	const int ki_slider_max = MAX_PID_SLIDER;
+	const int kd_slider_max = MAX_PID_SLIDER;
+	int kp_slider = (int)(KP * MAX_PID_SLIDER / MAX_PID_VALUE);
+	int ki_slider = (int)(KI * MAX_PID_SLIDER / MAX_PID_VALUE);
+	int kd_slider = (int)(KD * MAX_PID_SLIDER / MAX_PID_VALUE);
+	PIDCallbackParams kp{
+		&(x_control.kp_ref()),
+		&(y_control.kp_ref()),
+		&x_control,
+		&y_control
+	};
+	PIDCallbackParams ki{
+		&(x_control.ki_ref()),
+		&(y_control.ki_ref()),
+		&x_control,
+		&y_control
+	};
+	PIDCallbackParams kd{
+		&(x_control.kd_ref()),
+		&(y_control.kd_ref()),
+		&x_control,
+		&y_control
+	};
+	cv::createTrackbar("KP", colour_view, &kp_slider, kp_slider_max, PID_callback, static_cast<void *>(&kp));
+	cv::createTrackbar("KI", colour_view, &ki_slider, kp_slider_max, PID_callback, static_cast<void *>(&ki));
+	cv::createTrackbar("KD", colour_view, &kd_slider, kp_slider_max, PID_callback, static_cast<void *>(&kd));
 	
 	while(running){
 		BlobInfo display = display_in.get();

@@ -21,6 +21,7 @@
 #include "displayWorker.hpp"
 #include "pwmWorker.hpp"
 #include "mailBox.hpp"
+#include "PID.hpp"
 #include <thread>
 
 int main(){
@@ -31,6 +32,8 @@ int main(){
 	
 	// set up shared memory
 	ProcParams params = {};
+	PID x_control(KP, KI, KD, MAX_TILT, MIN_TILT);
+	PID y_control(KP, KI, KD, MAX_TILT, MIN_TILT);
 	
 	bool running = true;
 	
@@ -44,6 +47,8 @@ int main(){
 		process,
 		std::ref(capture2process),
 		std::ref(params),
+		std::ref(x_control),
+		std::ref(y_control),
 		std::ref(process2pwm),
 		std::ref(process2display),
 		std::ref(running)
@@ -57,6 +62,8 @@ int main(){
 		display,
 		std::ref(process2display),
 		std::ref(params),
+		std::ref(x_control),
+		std::ref(y_control),
 		std::ref(running)
 	);
 	

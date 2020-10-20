@@ -20,6 +20,12 @@
 
 #include "mailBox.hpp"
 
+#define MAX_PID_SLIDER 100.0
+#define MAX_PID_VALUE 1.0
+
+class ProcParams; // fwd dec
+class PID;
+
 struct BlobInfo{
 	bool found = false;
 	cv::Mat colour;
@@ -29,5 +35,11 @@ struct BlobInfo{
 	double dt;
 };
 
-class ProcParams; // fwd dec
-void display(MailBox<BlobInfo> &display_in, ProcParams &params, bool &running);
+struct PIDCallbackParams{
+	double *x;
+	double *y;
+	PID *pidx;
+	PID *pidy;
+};
+
+void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, PID &y_control, bool &running);

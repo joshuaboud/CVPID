@@ -66,4 +66,15 @@ public:
 		_previous_error = 0;
 		_integral = 0;
 	}
+	// getters
+	double kp(void) {return _kp;}
+	double ki(void) {return _ki;}
+	double kd(void) {return _kd;}
+	double &kp_ref(void) {return std::ref(_kp);}
+	double &ki_ref(void) {return std::ref(_ki);}
+	double &kd_ref(void) {return std::ref(_kd);}
+	// setters
+	void kp(double val) {_kp = val;}
+	void ki(double val) {_ki = val;}
+	void kd(double val) {_kd = val;}
 };
