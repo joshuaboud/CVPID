@@ -17,6 +17,7 @@
  */
 
 #include "captureWorker.hpp"
+#include "state.hpp"
 #include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
 
@@ -26,18 +27,18 @@
 #include <iostream>
 #endif
 
-void capture(MailBox<cv::Mat> &mb, bool &running){
+void capture(MailBox<cv::Mat> &mb, State::type &state){
 	cv::VideoCapture camera;
 	cv::Mat frame;
 	// open camera 0
 	if(!camera.open(0)){
 		printf("Error opening camera 0");
-		running = false;
+		state = State::exit;
 		return;
 	}
 	camera.set(cv::CAP_PROP_FRAME_WIDTH, 640);
 	camera.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
-	while(running){
+	while(state == State::running){
 #ifdef DEBUG
 		auto start = std::chrono::high_resolution_clock::now();
 #endif

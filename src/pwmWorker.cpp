@@ -17,6 +17,7 @@
  */
 
 #include "pwmWorker.hpp"
+#include "state.hpp"
 
 #ifdef DEBUG
 #include <chrono>
@@ -24,8 +25,8 @@
 #include <iostream>
 #endif
 
-void pwm(MailBox<PwmInfo> &pwm_in, bool &running){
-	while(running){
+void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
+	while(state == State::running){
 		PwmInfo in = pwm_in.get();
 #ifdef DEBUG
 		auto start = std::chrono::high_resolution_clock::now();

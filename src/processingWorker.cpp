@@ -21,6 +21,7 @@
 #include "displayWorker.hpp"
 #include "PID.hpp"
 #include "mailBox.hpp"
+#include "state.hpp"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <chrono>
@@ -30,9 +31,9 @@
 #include <iostream>
 #endif
 
-void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, bool &running){
+void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state){
 	cv::Mat input, HSV, binary;
-	while(running){
+	while(state == State::running){
 		auto start = std::chrono::high_resolution_clock::now();
 		BlobInfo display;
 		PwmInfo pwm;

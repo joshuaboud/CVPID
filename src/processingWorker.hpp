@@ -19,6 +19,7 @@
 #pragma once
 
 #include "mailBox.hpp"
+#include "state.hpp"
 #include <opencv2/opencv.hpp>
 
 #define KP 0.1
@@ -39,4 +40,5 @@ struct ProcParams{
 class PwmInfo;
 class BlobInfo;
 class PID;
-void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, bool &running);
+struct State;
+void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state);

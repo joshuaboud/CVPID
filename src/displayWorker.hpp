@@ -19,6 +19,7 @@
 #pragma once
 
 #include "mailBox.hpp"
+#include "state.hpp"
 
 #define MAX_PID_SLIDER 100.0
 #define MAX_PID_VALUE 1.0
@@ -42,4 +43,4 @@ struct PIDCallbackParams{
 	PID *pidy;
 };
 
-void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, PID &y_control, bool &running);
+void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, PID &y_control, State::type &state);

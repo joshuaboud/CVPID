@@ -20,6 +20,7 @@
 #include "mailBox.hpp"
 #include "processingWorker.hpp"
 #include "PID.hpp"
+#include "state.hpp"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
@@ -80,7 +81,7 @@ static void PID_callback(int position, void *params_){
 }
 	
 
-void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, PID &y_control, bool &running){
+void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, PID &y_control, State::type &state){
 	// Create a window
 	cv::namedWindow(colour_view, 1);
 	// Create a window
@@ -126,7 +127,7 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 	cv::createTrackbar("KI", colour_view, &ki_slider, MAX_PID_SLIDER, PID_callback, static_cast<void *>(&ki));
 	cv::createTrackbar("KD", colour_view, &kd_slider, MAX_PID_SLIDER, PID_callback, static_cast<void *>(&kd));
 	
-	while(running){
+	while(state == State::running){
 		BlobInfo display = display_in.get();
 		draw_target(display.colour, params.set_point_x, params.set_point_y);
 		if(display.found){
@@ -139,10 +140,12 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 	
 		char keypress = (char)cv::waitKey(1);
 		if(keypress == (char)27)
-			running = false;
+			state = State::exit;
 		else if(keypress == 'r'){
 			x_control.reset();
 			y_control.reset();
 		}
+		else if(keypress == 'R')
+			state = State::reset;
 	}
 }

@@ -19,10 +19,12 @@
 #pragma once
 
 #include "mailBox.hpp"
+#include "state.hpp"
 
 struct PwmInfo{
 	double x;
 	double y;
 };
 
-void pwm(MailBox<PwmInfo> &pwm_in, bool &running);
+struct State;
+void pwm(MailBox<PwmInfo> &pwm_in, State::type &state);

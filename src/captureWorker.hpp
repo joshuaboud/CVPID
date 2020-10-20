@@ -19,6 +19,7 @@
 #pragma once
 
 #include "mailBox.hpp"
+#include "state.hpp"
 #include <opencv2/opencv.hpp>
 
-void capture(MailBox<cv::Mat> &mb, bool &running);
+void capture(MailBox<cv::Mat> &mb, State::type &state);
