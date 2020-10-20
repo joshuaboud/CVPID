@@ -101,9 +101,6 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 	params.set_point_y = 360 / 2;
 	cv::setMouseCallback(colour_view, mouse_callback, &params);
 	
-	const int kp_slider_max = MAX_PID_SLIDER;
-	const int ki_slider_max = MAX_PID_SLIDER;
-	const int kd_slider_max = MAX_PID_SLIDER;
 	int kp_slider = (int)(KP * MAX_PID_SLIDER / MAX_PID_VALUE);
 	int ki_slider = (int)(KI * MAX_PID_SLIDER / MAX_PID_VALUE);
 	int kd_slider = (int)(KD * MAX_PID_SLIDER / MAX_PID_VALUE);
@@ -125,9 +122,9 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 		&x_control,
 		&y_control
 	};
-	cv::createTrackbar("KP", colour_view, &kp_slider, kp_slider_max, PID_callback, static_cast<void *>(&kp));
-	cv::createTrackbar("KI", colour_view, &ki_slider, kp_slider_max, PID_callback, static_cast<void *>(&ki));
-	cv::createTrackbar("KD", colour_view, &kd_slider, kp_slider_max, PID_callback, static_cast<void *>(&kd));
+	cv::createTrackbar("KP", colour_view, &kp_slider, MAX_PID_SLIDER, PID_callback, static_cast<void *>(&kp));
+	cv::createTrackbar("KI", colour_view, &ki_slider, MAX_PID_SLIDER, PID_callback, static_cast<void *>(&ki));
+	cv::createTrackbar("KD", colour_view, &kd_slider, MAX_PID_SLIDER, PID_callback, static_cast<void *>(&kd));
 	
 	while(running){
 		BlobInfo display = display_in.get();
@@ -143,5 +140,9 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 		char keypress = (char)cv::waitKey(1);
 		if(keypress == (char)27)
 			running = false;
+		else if(keypress == 'r'){
+			x_control.reset();
+			y_control.reset();
+		}
 	}
 }
