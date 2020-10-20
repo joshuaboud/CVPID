@@ -17,13 +17,29 @@
  */
 
 #include "pwmWorker.hpp"
+
+#ifdef DEBUG
+#include <chrono>
+#include <sstream>
 #include <iostream>
+#endif
 
 void pwm(MailBox<PwmInfo> &pwm_in, bool &running){
 	while(running){
 		PwmInfo in = pwm_in.get();
+#ifdef DEBUG
+		auto start = std::chrono::high_resolution_clock::now();
+#endif
+		(void) in;
 		// send pwm to controller board
-		std::cout << "Angle: " << in.x << ", " << in.y << std::endl;
+#ifdef DEBUG
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		std::stringstream msg;
+		msg << "pwm time: " << elapsed.count() << '\n';
+		msg << "Angle: " << in.x << ", " << in.y << "\n\n";
+		std::cout << msg.str();
+#endif
 	}
 	// set table level here before exiting
 }

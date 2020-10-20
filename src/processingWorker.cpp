@@ -25,6 +25,11 @@
 #include <opencv2/imgproc.hpp>
 #include <chrono>
 
+#ifdef DEBUG
+#include <sstream>
+#include <iostream>
+#endif
+
 void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, bool &running){
 	cv::Mat input, HSV, binary;
 	while(running){
@@ -32,6 +37,9 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PI
 		BlobInfo display;
 		PwmInfo pwm;
 		input = in.get();
+#ifdef DEBUG
+		auto processing_start = std::chrono::high_resolution_clock::now();
+#endif
 		cv::cvtColor(input, HSV, cv::COLOR_BGR2HSV);
 		cv::Scalar low_HSV((params.hue_center - 10)%180, params.min_S, params.min_V);
 		cv::Scalar high_HSV((params.hue_center + 10)%180, 255, 255);
@@ -59,6 +67,13 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PI
 		display.dt = dt;
 		display.colour = input;
 		display.binary = binary;
+#ifdef DEBUG
+		auto processing_finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> processing_elapsed = processing_finish - processing_start;
+		std::stringstream msg;
+		msg << "process time: " << processing_elapsed.count() << '\n';
+		std::cout << msg.str();
+#endif
 		display_out.try_put(display); // low priority, skip if can't
 		pwm_out.put(pwm); // high priority
 	}

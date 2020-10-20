@@ -10,10 +10,12 @@ ifeq ($(PREFIX),)
 	PREFIX := /usr/local
 endif
 
-.PHONY: default all clean clean-build clean-target install uninstall
+.PHONY: default all debug clean clean-build clean-target install uninstall
 
 default: $(TARGET)
 all: default
+debug: CFLAGS += -D DEBUG
+debug: default
 
 %.o: %.cpp $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@

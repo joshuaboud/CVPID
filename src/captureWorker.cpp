@@ -20,6 +20,12 @@
 #include "mailBox.hpp"
 #include <opencv2/opencv.hpp>
 
+#ifdef DEBUG
+#include <chrono>
+#include <sstream>
+#include <iostream>
+#endif
+
 void capture(MailBox<cv::Mat> &mb, bool &running){
 	cv::VideoCapture camera;
 	cv::Mat frame;
@@ -32,7 +38,17 @@ void capture(MailBox<cv::Mat> &mb, bool &running){
 	camera.set(cv::CAP_PROP_FRAME_WIDTH, 640);
 	camera.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
 	while(running){
+#ifdef DEBUG
+		auto start = std::chrono::high_resolution_clock::now();
+#endif
 		camera >> frame;
+#ifdef DEBUG
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		std::stringstream msg;
+		msg << "capture time: " << elapsed.count() << '\n';
+		std::cout << msg.str();
+#endif
 		mb.put(frame);
 	}
 }
