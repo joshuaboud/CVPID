@@ -25,4 +25,5 @@ void pwm(MailBox<PwmInfo> &pwm_in, bool &running){
 		// send pwm to controller board
 		std::cout << "Angle: " << in.x << ", " << in.y << std::endl;
 	}
+	// set table level here before exiting
 }
