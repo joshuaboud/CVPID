@@ -31,7 +31,7 @@ void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 #ifdef DEBUG
 		auto start = std::chrono::high_resolution_clock::now();
 #endif
-		(void) in;
+		(void) in; // this is just to suppress unused variable warning, remove
 		// send pwm to controller board
 #ifdef DEBUG
 		auto finish = std::chrono::high_resolution_clock::now();
