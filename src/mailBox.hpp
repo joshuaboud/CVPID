@@ -19,20 +19,18 @@
 #pragma once
 
 #include <mutex>
+#include <condition_variable>
 #include <opencv2/opencv.hpp>
-
-//#include <semaphore> C++20
-#include "semaphore.hpp"
 
 template <class T>
 class MailBox{
 private:
-	//std::counting_semaphore sem;
-	Semaphore sem;
-	std::mutex full;
+	bool full;
+	std::mutex mt;
+	std::condition_variable cv;
 	T package;
 public:
-	MailBox() : sem() {}
+	MailBox() { full = false; }
 	/*friend cv::VideoCapture &operator>>(
 		cv::VideoCapture &in,
 		MailBox<cv::Mat> &mb
@@ -43,24 +41,36 @@ public:
 		mb.sem.notify();
 		return in;
 	}*/
+	bool isFull() const {
+		return full;
+	}
 	void put(T &in){
-		full.lock();
-		package = T(in);
-		//sem.release();
-		sem.notify();
+		{
+			std::unique_lock<std::mutex> lk(mt);
+			cv.wait(lk, [this](){return !isFull();});
+			package = T(in);
+			full = true;
+		}
+		cv.notify_all();
 	}
 	void try_put(T &in){
-		if(full.try_lock()){
+		{
+			std::unique_lock<std::mutex> lk(mt);
+			if(full) return;
 			package = T(in);
-			//sem.release();
-			sem.notify();
+			full = true;
 		}
+		cv.notify_all();
 	}
 	T get(void){
-		//sem.acquire();
-		sem.wait();
-		T out = T(package);
-		full.unlock();
+		T out;
+		{
+			std::unique_lock<std::mutex> lk(mt);
+			cv.wait(lk, [this](){return isFull();});
+			out = T(package);
+			full = false;
+		}
+		cv.notify_one();
 		return out;
 	}
 };
