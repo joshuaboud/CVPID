@@ -31,16 +31,6 @@ private:
 	T package;
 public:
 	MailBox() { full = false; }
-	/*friend cv::VideoCapture &operator>>(
-		cv::VideoCapture &in,
-		MailBox<cv::Mat> &mb
-	){
-		mb.full.lock();
-		in >> mb.package;
-		//mb.sem.release();
-		mb.sem.notify();
-		return in;
-	}*/
 	bool isFull() const {
 		return full;
 	}
