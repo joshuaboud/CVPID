@@ -37,8 +37,8 @@ void process(MailBox<frameAndTime> &in, struct ProcParams &params, PID &x_contro
 void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state){
 #endif
 	cv::Mat input, HSV, binary;
+	auto start = std::chrono::high_resolution_clock::now();
 	while(state == State::running){
-		auto start = std::chrono::high_resolution_clock::now();
 		BlobInfo display;
 		PwmInfo pwm;
 		
@@ -61,6 +61,7 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PI
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		double dt = elapsed.count();
+		start = std::chrono::high_resolution_clock::now();
 		if(mu.m00 < params.min_A){
 			display.found = false;
 			pwm.x = pwm.y = 0;
