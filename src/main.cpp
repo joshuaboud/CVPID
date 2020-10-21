@@ -23,11 +23,24 @@
 #include "mailBox.hpp"
 #include "PID.hpp"
 #include "state.hpp"
+#include <pthread.h>
 #include <thread>
+#include <iostream>
 
 #ifdef DEBUG
 #include "debug.hpp"
 #endif
+
+inline void set_prio(std::thread &t, const std::string &name){
+	pthread_setname_np(t.native_handle(), name.c_str());
+	int policy;
+	sched_param sch;
+	pthread_getschedparam(t.native_handle(), &policy, &sch);
+	sch.sched_priority = 20;
+	if(pthread_setschedparam(t.native_handle(), SCHED_FIFO, &sch)){
+		std::cerr << "Error setting scheduler" << std::endl;
+	}
+}
 
 int main(){
 	State::type state;
@@ -76,6 +89,10 @@ int main(){
 			std::ref(y_control),
 			std::ref(state)
 		);
+		
+		set_prio(capture_worker, "CVPID_capture");
+		set_prio(process_worker, "CVPID_process");
+		set_prio(pwm_worker, "CVPID_pwm");
 		
 		// synchronize threads
 		capture_worker.join();
