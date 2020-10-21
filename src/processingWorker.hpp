@@ -22,6 +22,10 @@
 #include "state.hpp"
 #include <opencv2/opencv.hpp>
 
+#ifdef DEBUG
+#include "debug.hpp"
+#endif
+
 #define KP 0.1
 #define KI 0.01
 #define KD 0.01
@@ -41,4 +45,8 @@ class PwmInfo;
 class BlobInfo;
 class PID;
 struct State;
+#ifdef DEBUG
+void process(MailBox<frameAndTime> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state);
+#else
 void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state);
+#endif

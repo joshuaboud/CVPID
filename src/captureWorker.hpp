@@ -22,4 +22,9 @@
 #include "state.hpp"
 #include <opencv2/opencv.hpp>
 
+#ifdef DEBUG
+#include "debug.hpp"
+void capture(MailBox<frameAndTime> &mb, State::type &state);
+#else
 void capture(MailBox<cv::Mat> &mb, State::type &state);
+#endif

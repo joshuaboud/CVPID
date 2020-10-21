@@ -25,12 +25,20 @@
 #include "state.hpp"
 #include <thread>
 
+#ifdef DEBUG
+#include "debug.hpp"
+#endif
+
 int main(){
 	State::type state;
 	do{
 		state = State::running;
 		// set up mailboxes
+#ifdef DEBUG
+		MailBox<frameAndTime> capture2process;
+#else
 		MailBox<cv::Mat> capture2process;
+#endif
 		MailBox<PwmInfo> process2pwm;
 		MailBox<BlobInfo> process2display;
 		

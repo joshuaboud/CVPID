@@ -21,9 +21,17 @@
 #include "mailBox.hpp"
 #include "state.hpp"
 
+#ifdef DEBUG
+#include <chrono>
+#endif
+
 struct PwmInfo{
 	double x;
 	double y;
+#ifdef DEBUG
+	double dt;
+	std::chrono::high_resolution_clock::time_point timestamp;
+#endif
 };
 
 struct State;

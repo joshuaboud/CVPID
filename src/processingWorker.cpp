@@ -31,13 +31,24 @@
 #include <iostream>
 #endif
 
+#ifdef DEBUG
+void process(MailBox<frameAndTime> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state){
+#else
 void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PID &y_control, MailBox<struct PwmInfo> &pwm_out, MailBox<struct BlobInfo> &display_out, State::type &state){
+#endif
 	cv::Mat input, HSV, binary;
 	while(state == State::running){
 		auto start = std::chrono::high_resolution_clock::now();
 		BlobInfo display;
 		PwmInfo pwm;
+		
+#ifdef DEBUG
+		frameAndTime ft = in.get();
+		input = ft.frame;
+#else
 		input = in.get();
+#endif
+		
 #ifdef DEBUG
 		auto processing_start = std::chrono::high_resolution_clock::now();
 #endif
@@ -69,10 +80,13 @@ void process(MailBox<cv::Mat> &in, struct ProcParams &params, PID &x_control, PI
 		display.colour = input;
 		display.binary = binary;
 #ifdef DEBUG
+		pwm.dt = dt;
+		pwm.timestamp = ft.timestamp;
 		auto processing_finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> processing_elapsed = processing_finish - processing_start;
 		std::stringstream msg;
-		msg << "process time: " << processing_elapsed.count() << '\n';
+		msg.precision(4);
+		msg << "process time: " << processing_elapsed.count() << "s\n";
 		std::cout << msg.str();
 #endif
 		display_out.try_put(display); // low priority, skip if can't

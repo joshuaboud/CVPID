@@ -22,12 +22,17 @@
 #include <opencv2/opencv.hpp>
 
 #ifdef DEBUG
+#include "debug.hpp"
 #include <chrono>
 #include <sstream>
 #include <iostream>
 #endif
 
+#ifdef DEBUG
+void capture(MailBox<frameAndTime> &mb, State::type &state){
+#else
 void capture(MailBox<cv::Mat> &mb, State::type &state){
+#endif
 	cv::VideoCapture camera;
 	cv::Mat frame;
 	// open camera 0
@@ -47,9 +52,13 @@ void capture(MailBox<cv::Mat> &mb, State::type &state){
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		std::stringstream msg;
-		msg << "capture time: " << elapsed.count() << '\n';
+		msg.precision(4);
+		msg << "capture time: " << elapsed.count() << "s\n";
 		std::cout << msg.str();
-#endif
+		frameAndTime ft{frame, start};
+		mb.put(ft);
+#else
 		mb.put(frame);
+#endif
 	}
 }
