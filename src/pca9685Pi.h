@@ -73,7 +73,7 @@ Modified to run on a raspberry pi using wiringPiI2C.h instead of an ardunio usin
 
 #define SERVO_FREQ 50
 
-int servo_setup(int addr,int freq);
-void setPulse(int fd, int servo, double degree, double center=(SERVOMIN+SERVOMAX)/2.0);//+-45
+int boardSetup(int addr,int freq);
+void setAngle(int fd, int servo, double degree, double center=(SERVOMIN+SERVOMAX)/2.0);//+-45
 
 #endif
