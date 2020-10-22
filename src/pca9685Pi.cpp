@@ -24,14 +24,27 @@ Modified to run on a raspberry pi using wiringPiI2C.h instead of an ardunio usin
 
 using namespace std;
 #include "pca9685_pi.h"
-
-void setPulse(int fd, int servo, double degree, double center){//+-45
+/*
+int fd is the result of boardSetup, 
+int servo is the number from 0-15 
+double degree is the angle to set. +-45ish
+center is optional and must be between SERVO_MIN and SERVO_MAX
+*/
+void setAngle(int fd, int servo, double degree, double center){
   const double secondsPerDegree=(SERVOMAX-SERVOMIN)/90.0;
   double pulse = degree*secondsperdegree+center;
+	
   if(pulse<SERVOMIN)
-	  pulse=SERVOMIN;
+    pulse=SERVOMIN;
   else if(pulse>SERVOMAX)
     pulse=SERVOMAX;
+  if(center<SERVOMIN)
+    center=SERVOMIN;
+  else if(center>SERVOMAX)
+    center=SERVOMAX;
+  if(servo>15||servo<0)
+    return;
+	
   double pulseLength;
   int result;
   pulseLength = 1000000;   // 1,000,000 us per second
@@ -51,7 +64,11 @@ void setPulse(int fd, int servo, double degree, double center){//+-45
     cout << "Error.  Errno is: " << errno << endl;
   }
 }
-int servo_setup(int addr,int freq){//PWM Freq
+/*
+addr is the I2C address of the board. Default is 0x40
+freq is the PWM frequency, should be 50
+*/
+int boardSetup(int addr,int freq){//PWM Freq
   int fd = wiringPiI2CSetup(addr);
 	
   wiringPiI2CWriteReg8(fd, PCA9685_MODE1, MODE1_RESTART);
