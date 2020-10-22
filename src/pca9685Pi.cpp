@@ -32,7 +32,7 @@ center is optional and must be between SERVO_MIN and SERVO_MAX
 */
 void setAngle(int fd, int servo, double degree, double center){
   const double secondsPerDegree=(SERVOMAX-SERVOMIN)/90.0;
-  double pulse = degree*secondsperdegree+center;
+  double pulse = degree*secondsPerDegree+center;
 	
   if(pulse<SERVOMIN)
     pulse=SERVOMIN;
