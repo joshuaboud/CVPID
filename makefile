@@ -1,5 +1,5 @@
 TARGET = cvpid
-LIBS = -L$(HOME)/.local/lib -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_videoio -lpthread
+LIBS = -L$(HOME)/.local/lib -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_videoio -lpthread -lwiringPi
 CC = g++
 CFLAGS = -std=c++11 -Wall -Wextra -I$(HOME)/.local/include/opencv4 
 
