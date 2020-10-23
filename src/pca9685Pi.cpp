@@ -23,7 +23,7 @@ Modified to run on a raspberry pi using wiringPiI2C.h instead of an ardunio usin
 #include <unistd.h>
 
 using namespace std;
-#include "pca9685Pi.h"
+#include "pca9685Pi.hpp"
 /*
 int fd is the result of boardSetup, 
 int servo is the number from 0-15 
