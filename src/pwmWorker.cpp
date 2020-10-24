@@ -40,7 +40,6 @@ void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 		setAngle(board, Y_SERVO, in.y);
 		
 #ifdef DEBUG
-		std::this_thread::sleep_for(std::chrono::milliseconds(50)); // simulate sending PWM
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		std::chrono::duration<double> total_elapsed = finish - in.timestamp;
