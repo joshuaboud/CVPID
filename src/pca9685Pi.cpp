@@ -54,12 +54,10 @@ void setAngle(int fd, int servo, double degree, double center){
   pulse /= pulseLength;
  
   uint16_t p = (uint16_t)pulse;
-  
   result = wiringPiI2CWriteReg8(fd, PCA9685_LED0_ON_L + 4 * servo, 0 );
-  result += wiringPiI2CWriteReg8(fd, PCA9685_LED0_ON_L + 4 * servo+1, 0 );
-    
-  result += wiringPiI2CWriteReg8(fd, PCA9685_LED0_ON_L + 4 * servo+2, p );
-  result += wiringPiI2CWriteReg8(fd, PCA9685_LED0_ON_L + 4 * servo+3, p>>8 );
+  result += wiringPiI2CWriteReg8(fd, PCA9685_LED0_ON_H + 4 * servo, 0 );
+  result += wiringPiI2CWriteReg8(fd, PCA9685_LED0_OFF_L + 4 * servo, p );
+  result += wiringPiI2CWriteReg8(fd, PCA9685_LED0_OFF_H + 4 * servo, p>>8 );
   if(result <0){
     cout << "Error.  Errno is: " << errno << endl;
   }
