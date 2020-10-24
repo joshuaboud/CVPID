@@ -18,6 +18,7 @@
 
 #include "pwmWorker.hpp"
 #include "state.hpp"
+#include "pca9685Pi.hpp"
 
 #ifdef DEBUG
 #include <thread>
@@ -27,6 +28,7 @@
 #endif
 
 void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
+	int board = boardSetup(I2Caddr,PWM_FREQ);
 	while(state == State::running){
 		PwmInfo in = pwm_in.get();
 #ifdef DEBUG
@@ -34,6 +36,9 @@ void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 #endif
 		(void) in; // this is just to suppress unused variable warning, remove
 		// send pwm to controller board
+		setAngle(board, X_SERVO, in.x);
+		setAngle(board, Y_SERVO, in.y);
+		
 #ifdef DEBUG
 		std::this_thread::sleep_for(std::chrono::milliseconds(50)); // simulate sending PWM
 		auto finish = std::chrono::high_resolution_clock::now();
@@ -48,5 +53,4 @@ void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 		std::cout << msg.str();
 #endif
 	}
-	// set table level here before exiting
 }

@@ -21,6 +21,11 @@
 #include "mailBox.hpp"
 #include "state.hpp"
 
+#define I2Caddr 0x40
+#define PWM_FREQ 50
+#define X_SERVO 0
+#define Y_SERVO 1
+
 #ifdef DEBUG
 #include <chrono>
 #endif

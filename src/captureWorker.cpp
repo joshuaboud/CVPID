@@ -43,6 +43,7 @@ void capture(MailBox<cv::Mat> &mb, State::type &state){
 	}
 	camera.set(cv::CAP_PROP_FRAME_WIDTH, 640);
 	camera.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
+	
 	while(state == State::running){
 #ifdef DEBUG
 		auto start = std::chrono::high_resolution_clock::now();
