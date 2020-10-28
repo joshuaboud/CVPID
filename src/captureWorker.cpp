@@ -42,7 +42,7 @@ void capture(MailBox<cv::Mat> &mb, State::type &state){
 		return;
 	}
 	camera.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-	camera.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
+	camera.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
 	
 	while(state == State::running){
 #ifdef DEBUG
