@@ -1,7 +1,7 @@
 /***************************************************
 Modified to run on a raspberry pi using wiringPiI2C.h instead of an ardunio using Wire.h
 
-/*************************************************** 
+*************************************************** 
   This is an example for our Adafruit 16-channel PWM & Servo driver
   Servo test - this will drive 8 servos, one after the other on the
   first 8 pins of the PCA9685
