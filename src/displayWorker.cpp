@@ -99,7 +99,7 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 	cv::createTrackbar("Min Area", binary_view, &params.min_A, min_A_slider_max, NULL);
 	
 	params.set_point_x = 640 / 2;
-	params.set_point_y = 360 / 2;
+	params.set_point_y = 480 / 2;
 	cv::setMouseCallback(colour_view, mouse_callback, &params);
 	
 	int kp_slider = (int)(KP * MAX_PID_SLIDER / MAX_PID_VALUE);
