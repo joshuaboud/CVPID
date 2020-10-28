@@ -51,10 +51,10 @@ void setAngle(int fd, int servo, double degree, double center){
 	
 	double pulseLength;
 	int result;
-	pulseLength = 1000000;	 // 1,000,000 us per second
-	pulseLength /= SERVO_FREQ;	 // Analog servos run at ~60 Hz updates 
-	pulseLength /= 4096;	// 12 bits of resolution
-	pulse *= 1000000;	// convert input seconds to us
+	pulseLength = 1000000.0;	 // 1,000,000 us per second
+	pulseLength /= (double) SERVO_FREQ;	 // Analog servos run at ~60 Hz updates 
+	pulseLength /= 4096.0;	// 12 bits of resolution
+	pulse *= 1000000.0;	// convert input seconds to us
 	pulse /= pulseLength;
  
 	uint16_t p = (uint16_t)pulse;
