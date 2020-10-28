@@ -1,7 +1,7 @@
 /***************************************************
 Modified to run on a raspberry pi using wiringPiI2C.h instead of an ardunio using Wire.h
 
-/*!
+ *!
  *  @file Adafruit_PWMServoDriver.h
  *
  *  This is a library for our Adafruit 16-channel PWM & Servo driver.
