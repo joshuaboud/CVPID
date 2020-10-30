@@ -89,9 +89,9 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 	const int hue_slider_max = 179 - 10;
 	const int SV_slider_max = 254;
 	const int min_A_slider_max = 1000;
-	params.hue_center = 108;
-	params.min_S = 100;
-	params.min_V = 64;
+	params.hue_center = 105;
+	params.min_S = 175;
+	params.min_V = 126;
 	params.min_A = 107;
 	cv::createTrackbar("Hue", binary_view, &params.hue_center, hue_slider_max, NULL);
 	cv::createTrackbar("Min Saturation", binary_view, &params.min_S, SV_slider_max, NULL);
