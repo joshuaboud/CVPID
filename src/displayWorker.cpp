@@ -139,7 +139,7 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 		cv::imshow(binary_view, display.binary);
 	
 		char keypress = (char)cv::waitKey(1);
-		if(keypress == (char)27)
+		if(keypress == (char)27 || keypress == 'q')
 			state = State::exit;
 		else if(keypress == 'r'){
 			x_control.reset();
