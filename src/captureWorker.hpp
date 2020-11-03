@@ -23,7 +23,11 @@
 #include <opencv2/opencv.hpp>
 
 #ifdef DEBUG
-#include "debug.hpp"
+#include <chrono>
+struct frameAndTime{
+	cv::Mat frame;
+	std::chrono::high_resolution_clock::time_point timestamp;
+};
 void capture(MailBox<frameAndTime> &mb, State::type &state);
 #else
 void capture(MailBox<cv::Mat> &mb, State::type &state);
