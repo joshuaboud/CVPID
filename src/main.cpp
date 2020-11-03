@@ -27,10 +27,6 @@
 #include <thread>
 #include <iostream>
 
-#ifdef DEBUG
-#include "debug.hpp"
-#endif
-
 inline void set_prio(std::thread &t, const std::string &name){
 	pthread_setname_np(t.native_handle(), name.c_str());
 	int policy;

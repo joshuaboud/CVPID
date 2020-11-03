@@ -23,7 +23,7 @@
 #include <opencv2/opencv.hpp>
 
 #ifdef DEBUG
-#include "debug.hpp"
+#include "captureWorker.hpp"
 #endif
 
 #define KP 0.1

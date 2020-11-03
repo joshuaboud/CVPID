@@ -22,7 +22,6 @@
 #include <opencv2/opencv.hpp>
 
 #ifdef DEBUG
-#include "debug.hpp"
 #include <chrono>
 #include <sstream>
 #include <iostream>
