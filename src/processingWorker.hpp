@@ -22,10 +22,6 @@
 #include "state.hpp"
 #include <opencv2/opencv.hpp>
 
-#ifdef DEBUG
-#include "debug.hpp"
-#endif
-
 #define KP 0.1
 #define KI 0.01
 #define KD 0.01
