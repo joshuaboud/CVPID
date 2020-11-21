@@ -68,8 +68,8 @@ Modified to run on a raspberry pi using wiringPiI2C.h instead of an ardunio usin
 #define PCA9685_PRESCALE_MIN 3   /**< minimum prescale value */
 #define PCA9685_PRESCALE_MAX 255 /**< maximum prescale value */
 
-#define SERVOMIN  0.0004 // This is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  0.0027 // This is the 'maximum' pulse length count (out of 4096)
+#define SERVOMIN  0.001 // This is the 'minimum' pulse length count (out of 4096) was 0.0004
+#define SERVOMAX  0.002 // This is the 'maximum' pulse length count (out of 4096) was 0.0027
 
 #define SERVO_FREQ 50
 
