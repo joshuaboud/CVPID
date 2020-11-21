@@ -35,7 +35,7 @@ double degree is the angle to set. +-45ish
 center is optional and must be between SERVO_MIN and SERVO_MAX
 */
 void setAngle(int fd, int servo, double degree, double center){
-	const double secondsPerDegree=(SERVOMAX-SERVOMIN)/90.0;
+	const double secondsPerDegree=(SERVOMAX-SERVOMIN)/180.0;
 	double pulse = degree*secondsPerDegree+center;
 	
 	if(pulse<SERVOMIN)
