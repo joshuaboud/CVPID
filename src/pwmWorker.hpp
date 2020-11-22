@@ -25,6 +25,7 @@
 #define PWM_FREQ 50
 #define X_SERVO 0
 #define Y_SERVO 1
+#define MAX_DIFF 5.0 // 5 degrees max change
 
 #ifdef DEBUG
 #include <chrono>

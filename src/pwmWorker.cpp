@@ -27,13 +27,27 @@
 #include <iostream>
 #endif
 
+inline void cap_difference(double &val, double &last_val){
+	double diff = val - last_val;
+	if(diff > MAX_DIFF)
+		val = last_val + MAX_DIFF; // cap to max diff
+	else if(diff < -MAX_DIFF)
+		val = last_val - MAX_DIFF; // cap to -max diff
+	last_val = val;
+}
+
 void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 	int board = boardSetup(I2Caddr,PWM_FREQ);
+	double last_x = 0.0;
+	double last_y = 0.0;
 	while(state == State::running){
 		PwmInfo in = pwm_in.get();
 #ifdef DEBUG
 		auto start = std::chrono::high_resolution_clock::now();
 #endif
+		// make sure change is not too much
+		cap_difference(in.x, last_x);
+		cap_difference(in.y, last_y);
 		// send pwm to controller board
 		setAngle(board, X_SERVO, in.x);
 		setAngle(board, Y_SERVO, in.y);
