@@ -22,7 +22,7 @@
 #include "state.hpp"
 
 #define MAX_PID_SLIDER 500.0
-#define MAX_PID_VALUE 0.1
+#define MAX_PID_VALUE 1.0
 
 class ProcParams; // fwd dec
 class PID;
