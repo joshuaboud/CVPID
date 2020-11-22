@@ -74,8 +74,8 @@ static void mouse_callback(int event, int x, int y, int flags, void* params_){
 
 static void PID_callback(int position, void *params_){
 	PIDCallbackParams *param = static_cast<PIDCallbackParams *>(params_);
-	*param->x = (double)(position) * MAX_PID_VALUE / MAX_PID_SLIDER;
-	*param->y = (double)(position) * MAX_PID_VALUE / MAX_PID_SLIDER;
+	*param->x = (double)(position) * MAX_PID_VALUE / 100.0; //MAX_PID_SLIDER;
+	*param->y = (double)(position) * MAX_PID_VALUE / 100.0; //MAX_PID_SLIDER;
 	param->pidx->reset();
 	param->pidy->reset();
 }
@@ -102,9 +102,9 @@ void display(MailBox<BlobInfo> &display_in, ProcParams &params, PID &x_control, 
 	params.set_point_y = 480 / 2;
 	cv::setMouseCallback(colour_view, mouse_callback, &params);
 	
-	int kp_slider = (int)(KP * MAX_PID_SLIDER / MAX_PID_VALUE);
-	int ki_slider = (int)(KI * MAX_PID_SLIDER / MAX_PID_VALUE);
-	int kd_slider = (int)(KD * MAX_PID_SLIDER / MAX_PID_VALUE);
+	int kp_slider = (int)(KP * 100.0 / MAX_PID_VALUE);
+	int ki_slider = (int)(KI * 100.0 / MAX_PID_VALUE);
+	int kd_slider = (int)(KD * 100.0 / MAX_PID_VALUE);
 	PIDCallbackParams kp{
 		&(x_control.kp_ref()),
 		&(y_control.kp_ref()),
