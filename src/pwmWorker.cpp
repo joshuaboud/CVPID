@@ -50,7 +50,7 @@ void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 		cap_difference(in.y, last_y);
 		// send pwm to controller board
 		setAngle(board, X_SERVO, -in.x);
-		setAngle(board, Y_SERVO, -in.y);
+		setAngle(board, Y_SERVO, in.y);
 		
 #ifdef DEBUG
 		auto finish = std::chrono::high_resolution_clock::now();
