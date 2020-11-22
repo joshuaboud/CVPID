@@ -21,7 +21,7 @@
 #include "mailBox.hpp"
 #include "state.hpp"
 
-#define MAX_PID_SLIDER 100.0
+#define MAX_PID_SLIDER 500.0
 #define MAX_PID_VALUE 0.1
 
 class ProcParams; // fwd dec
