@@ -18,6 +18,8 @@
 
 #pragma once
 
+#define K_SCALE 0.1
+
 class PID{
 private:
 	double _previous_error;
@@ -41,15 +43,15 @@ public:
 		double error = setpoint - curr;
 		
 		// P
-		double Po = error * _kp;
+		double Po = error * _kp * K_SCALE;
 		
 		// I
 		_integral += error * dt;
-		double Io = _integral * _ki;
+		double Io = _integral * _ki * K_SCALE;
 		
 		// D
 		double derivative = (error - _previous_error) / dt;
-		double Do = derivative * _kd;
+		double Do = derivative * _kd * K_SCALE;
 		
 		double out = Po + Io + Do;
 		
