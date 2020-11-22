@@ -28,7 +28,7 @@
 #endif
 
 const double x_offset = 0.0;
-const double y_offset = 1.0;
+const double y_offset = -5.0;
 
 inline void cap_difference(double &val, double &last_val){
 	double diff = val - last_val;
