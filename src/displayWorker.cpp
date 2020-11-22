@@ -74,8 +74,8 @@ static void mouse_callback(int event, int x, int y, int flags, void* params_){
 
 static void PID_callback(int position, void *params_){
 	PIDCallbackParams *param = static_cast<PIDCallbackParams *>(params_);
-	*param->x = (double)(position) * MAX_PID_VALUE / 100.0; //MAX_PID_SLIDER;
-	*param->y = (double)(position) * MAX_PID_VALUE / 100.0; //MAX_PID_SLIDER;
+	*param->x = (double)(position) * MAX_PID_VALUE / 1000.0; //MAX_PID_SLIDER;
+	*param->y = (double)(position) * MAX_PID_VALUE / 1000.0; //MAX_PID_SLIDER;
 	param->pidx->reset();
 	param->pidy->reset();
 }
