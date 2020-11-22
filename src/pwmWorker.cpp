@@ -27,6 +27,9 @@
 #include <iostream>
 #endif
 
+const double x_offset = 0.0;
+const double y_offset = 1.0;
+
 inline void cap_difference(double &val, double &last_val){
 	double diff = val - last_val;
 	if(diff > MAX_DIFF)
@@ -49,8 +52,8 @@ void pwm(MailBox<PwmInfo> &pwm_in, State::type &state){
 		cap_difference(in.x, last_x);
 		cap_difference(in.y, last_y);
 		// send pwm to controller board
-		setAngle(board, X_SERVO, in.x);
-		setAngle(board, Y_SERVO, in.y);
+		setAngle(board, X_SERVO, in.x + x_offset);
+		setAngle(board, Y_SERVO, in.y + y_offset);
 		
 #ifdef DEBUG
 		auto finish = std::chrono::high_resolution_clock::now();
