@@ -101,7 +101,7 @@ int boardSetup(int addr,int freq){//PWM Freq
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, newmode);														 // go to sleep
 	wiringPiI2CWriteReg8(fd, PCA9685_PRESCALE, prescale); // set the prescaler
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, oldmode);
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 	// This sets the MODE1 register to turn on auto increment.
 	wiringPiI2CWriteReg8(fd, PCA9685_MODE1, oldmode | MODE1_RESTART | MODE1_AI);
 	return fd;
