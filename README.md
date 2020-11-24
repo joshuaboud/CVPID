@@ -1,5 +1,26 @@
 # CVPID
 Computer Vision PID Control
-In partial requirements of ECED4402 - Real Time Systems
+CVPID is a computer vision controlled two dimensional PID system that balances a ball on top of a table, written in C++ using the OpenCV library. Real time FIFO scheduling and multiple threads were used to increase throughput of data processing. This project was created in partial fulfillment of the requirements of ECED4402 - Real Time Systems at Dalhousie University.
+https://www.youtube.com/watch?v=JQjQdtcZW6I
 
-To demonstrate a responsive real-time system, we researched several real time systems and decided to make a computer vision PID Controlled ping-pong ball balancer. A basic requirement will be to balance a ball at any position on a tiltable table and to be able to guide the ball from any position at rest to the set position. We are hoping that this will even be responsive enough to “catch” a ball that is tossed onto the table with minimal bounce. There of course would be limitations to this, depending on the speed of the ball and how it bounces. We only plan to work on two dimensions but someday this could be modified to detect the 3D position of the ball.
+# Wiring Instructions
+<img src="https://raw.githubusercontent.com/joshuaboud/CVPID/main/WiringDiagram.png">.
+Do not try to run the servo motors off the RPi's 5V power.
+
+# Build Instructions 
+We installed OpenCV to ~/.local/ 
+$ sudo apt-get install cmake
+$ git clone https://github.com/opencv/opencv.git
+$ cd opencv
+$ mkdir build && cd build 
+$ cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=~/.local ..
+
+This next step takes a long time. 
+$ make -j7
+
+$ cd
+$ git clone https://github.com/joshuaboud/CVPID.git
+$ cd CVPID
+$ make
+Now run the program
+$ sudo ./cvpid 
