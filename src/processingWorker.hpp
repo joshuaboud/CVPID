@@ -26,9 +26,9 @@
 #include "captureWorker.hpp"
 #endif
 
-#define KP 0.26
-#define KI 0.11
-#define KD 0.11
+#define KP 0.32
+#define KI 0.49
+#define KD 0.15
 #define MAX_TILT 25.0
 #define MIN_TILT -25.0
 
