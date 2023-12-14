@@ -9,18 +9,18 @@ Do not try to run the servo motors off the RPi's 5V power.
 
 # Build Instructions 
 We installed OpenCV to ~/.local/ 
-$ sudo apt-get install cmake
-$ git clone https://github.com/opencv/opencv.git
-$ cd opencv
-$ mkdir build && cd build 
-$ cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=~/.local ..
-
-This next step takes a long time. 
-$ make -j7
-
-$ cd
-$ git clone https://github.com/joshuaboud/CVPID.git
-$ cd CVPID
-$ make
-Now run the program
-$ sudo ./cvpid 
+```bash
+sudo apt-get install cmake
+git clone https://github.com/opencv/opencv.git
+cd opencv
+mkdir build && cd build 
+cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=~/.local ..
+# This next step takes a long time. 
+make -j7
+cd
+git clone https://github.com/joshuaboud/CVPID.git
+cd CVPID
+make
+# Now run the program
+sudo ./cvpid 
+```
